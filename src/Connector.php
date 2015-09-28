@@ -12,7 +12,7 @@ class Connector
      * API URL
      * @var string
      */
-    protected $baseUrl = 'http://api.callpage.local/api/v1/external/';
+    protected $baseUrl = 'http://api.callpage.io/api/v1/external/';
     /**
      * API Key for secured connection
      * @var string
