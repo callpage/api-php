@@ -1,0 +1,20 @@
+{
+  "name": "callpage/api-php",
+  "type": "library",
+  "description": "A PHP wrapper for CallPage API",
+  "keywords": ["callpage", "voip", "api"],
+  "homepage": "http://github.com/callpage/api-php",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Andriy Tkachiv",
+      "email": "andrew.tkachiv@callpage.io"
+    }
+  ],
+  "require": {
+    "php": ">=5.2.1"
+  },
+  "autoload": {
+    "files": ["src/"]
+  }
+}
