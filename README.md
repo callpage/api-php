@@ -16,7 +16,7 @@ dependencies.
 Once you download the library, move the **callpage/api-php** folder to your project
 directory and then include the library file:
 
-    require '/path/to/callpage/api-php/src/autoload.php';
+    require '/path/to/callpage/api-php/autoload.php';
 
 and you're good to go!
 
