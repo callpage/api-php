@@ -37,9 +37,9 @@ class Connector
         return $url;
     }
 
-    public function request($endpoint, $params = [], $options = [])
+    public function request($endpoint, $params = array(), $options = array())
     {
-        $headers = [];
+        $headers = array();
         $headers[] = "Authorization: {$this->apiKey}";
 
         $params['url'] = $this->getUrl();
@@ -88,14 +88,14 @@ class Connector
         }
     }
 
-    public function get($endpoint, $params = [])
+    public function get($endpoint, $params = array())
     {
         return $this->request($endpoint, $params, [
             'method' => 'get'
         ]);
     }
 
-    public function post($endpoint, $params = [])
+    public function post($endpoint, $params = array())
     {
         return $this->request($endpoint, $params, [
             'method' => 'post'

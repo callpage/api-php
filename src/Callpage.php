@@ -29,10 +29,10 @@ class Callpage
      */
     public function callOrSchedule($to)
     {
-        return $this->connector->post('widgets/callorschedule', [
+        return $this->connector->post('widgets/callorschedule', array(
             'encrypted_id' => $this->encrypted_id,
             'tel' => $to,
-        ]);
+        ));
     }
 
     /**
@@ -41,10 +41,10 @@ class Callpage
      */
     public function call($to)
     {
-        return $this->connector->post('widgets/call', [
+        return $this->connector->post('widgets/call', array(
             'encrypted_id' => $this->encrypted_id,
             'tel' => $to
-        ]);
+        ));
     }
 
 }
