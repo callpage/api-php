@@ -12,7 +12,7 @@ class Connector
      * API URL
      * @var string
      */
-    protected $baseUrl = 'https://api.callpage.io/api/v1/external/';
+    protected $baseUrl = 'http://api.callpage.io/api/v1/external/';
     /**
      * API Key for secured connection
      * @var string
@@ -37,7 +37,37 @@ class Connector
         return $url;
     }
 
+    public function get($endpoint, $params = array())
+    {
+        return $this->request($endpoint, $params, [
+            'method' => 'get'
+        ]);
+    }
+
+    public function post($endpoint, $params = array())
+    {
+        return $this->request($endpoint, $params, [
+            'method' => 'post'
+        ]);
+    }
+
     public function request($endpoint, $params = array(), $options = array())
+    {
+
+        if (function_exists('curl_version')) {
+
+            return $this->requestCurl($endpoint, $params, $options);
+
+        //curl doesnt exists
+        } else {
+
+            return $this->requestFileGetContents($endpoint, $params, $options);
+
+        }
+
+    }
+
+    protected function requestCurl($endpoint, $params = array(), $options = array())
     {
         $headers = array();
         $headers[] = "Authorization: {$this->apiKey}";
@@ -56,7 +86,7 @@ class Connector
             curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($params));
             curl_setopt($curl, CURLOPT_URL, $this->getEndpoint($endpoint));
 
-        } elseif ($options['method' == 'get']) {
+        } else {
             curl_setopt($curl, CURLOPT_URL, $this->getEndpoint($endpoint, $params));
         }
 
@@ -88,18 +118,49 @@ class Connector
         }
     }
 
-    public function get($endpoint, $params = array())
+    protected function requestFileGetContents($endpoint, $params = array(), $options = array())
     {
-        return $this->request($endpoint, $params, [
-            'method' => 'get'
-        ]);
-    }
+        $params['url'] = $this->getUrl();
 
-    public function post($endpoint, $params = array())
-    {
-        return $this->request($endpoint, $params, [
-            'method' => 'post'
-        ]);
+        $opts = array('http' =>
+            array(
+                'content' => http_build_query($params),
+                'header' => "Authorization: {$this->apiKey}"
+            )
+        );
+
+        if ($options['method'] == 'post') {
+            $url = $this->getEndpoint($endpoint);
+            $opts['http']['method'] = 'POST';
+            $opts['http']['header'] = "Authorization: {$this->apiKey}\r\n" .
+                                      "Content-Type: application/x-www-form-urlencoded\r\n";
+        } else {
+            $url = $this->getEndpoint($endpoint);
+        }
+
+        $output = '';
+        try {
+            $output = json_decode(file_get_contents($url, false, stream_context_create($opts)), true);
+
+            if (!isset($output['hasError'])) {
+                throw new CallpageRestException([
+                    'message' => 'Something goes wrong.'
+                ]);
+            }
+
+            if ($output['hasError']) {
+                throw new CallpageRestException($output);
+            }
+
+            //return data
+            return $output['data'];
+        }
+        catch (CallpageRestException $e) {
+            throw new CallpageRestException($e->getOutput());
+        }
+        catch (\Exception $e) {
+            throw new CallpageRestException($output);
+        }
     }
 
 }
