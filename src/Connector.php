@@ -37,12 +37,12 @@ class Connector
 
     protected function getEndpoint($endpoint, $params = null)
     {
-        return ($this->isSSL()? 'https://' : 'http://') . $this->baseUrl . $endpoint . ($params? '?'.http_build_query($params) : '');
+        return 'https://' . $this->baseUrl . $endpoint . ($params? '?'.http_build_query($params) : '');
     }
 
     protected function getUrl()
     {
-        $url  = $this->isSSL() ? 'https://'.$_SERVER["SERVER_NAME"] :  'http://'.$_SERVER["SERVER_NAME"];
+        $url  = 'https://'.$_SERVER["SERVER_NAME"];
         $url .= ( $_SERVER["SERVER_PORT"] != 80 ) ? ":".$_SERVER["SERVER_PORT"] : "";
         $url .= $_SERVER["REQUEST_URI"];
         return $url;
