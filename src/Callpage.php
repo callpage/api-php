@@ -29,7 +29,7 @@ class Callpage
      */
     public function callOrSchedule($to)
     {
-        return $this->connector->post('widgets/callorschedule', array(
+        return $this->connector->post('widgets/call-or-schedule', array(
             'encrypted_id' => $this->encrypted_id,
             'tel' => $to,
         ));
